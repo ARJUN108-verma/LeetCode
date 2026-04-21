@@ -1,0 +1,37 @@
+class Solution:
+    def isNumber(self, s):
+        s = s.strip()
+        
+        num_seen = False
+        dot_seen = False
+        e_seen = False
+        num_after_e = True  # important for cases without 'e'
+
+        for i, ch in enumerate(s):
+            
+            if ch.isdigit():
+                num_seen = True
+                num_after_e = True
+            
+            elif ch in ['+', '-']:
+                # sign allowed only at start or just after e/E
+                if i > 0 and s[i - 1] not in ['e', 'E']:
+                    return False
+            
+            elif ch == '.':
+                # only one dot allowed and not after e/E
+                if dot_seen or e_seen:
+                    return False
+                dot_seen = True
+            
+            elif ch in ['e', 'E']:
+                # e/E must come after a number and only once
+                if e_seen or not num_seen:
+                    return False
+                e_seen = True
+                num_after_e = False  # must have digits after e
+            
+            else:
+                return False
+
+        return num_seen and num_after_e

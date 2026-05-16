@@ -1,0 +1,41 @@
+class Solution:
+    def minWindow(self, s, t):
+        
+        # Frequency map of characters in t
+        countT = {}
+        for ch in t:
+            countT[ch] = countT.get(ch, 0) + 1
+
+        left = 0
+        count = len(t)
+
+        min_len = float('inf')
+        start = 0
+
+        # Sliding window
+        for right in range(len(s)):
+
+            # If character is needed
+            if countT.get(s[right], 0) > 0:
+                count -= 1
+
+            countT[s[right]] = countT.get(s[right], 0) - 1
+
+            # Valid window found
+            while count == 0:
+
+                # Update minimum window
+                if right - left + 1 < min_len:
+                    min_len = right - left + 1
+                    start = left
+
+                # Remove left character
+                countT[s[left]] = countT.get(s[left], 0) + 1
+
+                # Window becomes invalid
+                if countT[s[left]] > 0:
+                    count += 1
+
+                left += 1
+
+        return "" if min_len == float('inf') else s[start:start + min_len]

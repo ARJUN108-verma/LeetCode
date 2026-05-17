@@ -1,0 +1,19 @@
+class Solution:
+    def combine(self, n, k):
+        result = []
+        path = []
+
+        def backtrack(start):
+            # If combination size becomes k
+            if len(path) == k:
+                result.append(path[:])
+                return
+
+            # Try all possible numbers
+            for i in range(start, n + 1):
+                path.append(i)          # choose
+                backtrack(i + 1)       # recurse
+                path.pop()             # backtrack
+
+        backtrack(1)
+        return result

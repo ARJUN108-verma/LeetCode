@@ -1,0 +1,46 @@
+from collections import defaultdict
+import re
+import sys
+
+text = sys.stdin.read().lower()
+
+# Split into sentences using '.'
+sentences = text.split('.')
+
+freq = defaultdict(int)
+first_occurrence = {}
+
+order = 0
+
+for sentence in sentences:
+    # Extract words only from the sentence
+    words = re.findall(r'[a-zA-Z]+', sentence)
+
+    # Generate trigrams within the same sentence
+    for i in range(len(words) - 2):
+        trigram = " ".join(words[i:i+3])
+
+        freq[trigram] += 1
+
+        # Store first occurrence order
+        if trigram not in first_occurrence:
+            first_occurrence[trigram] = order
+            order += 1
+
+# Find best trigram
+best = ""
+max_freq = 0
+best_order = float('inf')
+
+for trigram in freq:
+    if freq[trigram] > max_freq:
+        max_freq = freq[trigram]
+        best = trigram
+        best_order = first_occurrence[trigram]
+
+    elif freq[trigram] == max_freq:
+        if first_occurrence[trigram] < best_order:
+            best = trigram
+            best_order = first_occurrence[trigram]
+
+print(best)

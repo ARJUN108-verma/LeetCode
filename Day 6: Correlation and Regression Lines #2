@@ -1,0 +1,12 @@
+mean_p = 100
+sd_p = 8
+
+mean_s = 103
+sd_s = 4
+
+r = 0.4**0.5
+
+#slope
+b = r * (sd_p / sd_s)
+
+print(round(b,2))

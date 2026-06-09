@@ -1,0 +1,34 @@
+class Solution:
+    def restoreIpAddresses(self, s):
+        ans = []
+        n = len(s)
+
+        def dfs(idx, parts, path):
+            remaining_chars = n - idx
+            remaining_parts = 4 - parts
+
+            if remaining_chars < remaining_parts or remaining_chars > remaining_parts * 3:
+                return
+
+            if parts == 4:
+                if idx == n:
+                    ans.append(".".join(path))
+                return
+
+            for length in range(1, 4):
+                if idx + length > n:
+                    break
+
+                seg = s[idx:idx + length]
+
+                # No leading zeros
+                if len(seg) > 1 and seg[0] == '0':
+                    break
+
+                if int(seg) <= 255:
+                    path.append(seg)
+                    dfs(idx + length, parts + 1, path)
+                    path.pop()
+
+        dfs(0, 0, [])
+        return ans

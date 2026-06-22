@@ -1,0 +1,42 @@
+def count_components(grid):
+    rows = len(grid)
+    cols = len(grid[0])
+
+    visited = [[False] * cols for _ in range(rows)]
+
+    def dfs(r, c):
+        stack = [(r, c)]
+        visited[r][c] = True
+
+        while stack:
+            x, y = stack.pop()
+
+            for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                nx, ny = x + dx, y + dy
+
+                if (0 <= nx < rows and
+                    0 <= ny < cols and
+                    grid[nx][ny] == '1' and
+                    not visited[nx][ny]):
+                    visited[nx][ny] = True
+                    stack.append((nx, ny))
+
+    count = 0
+
+    for i in range(rows):
+        for j in range(cols):
+            if grid[i][j] == '1' and not visited[i][j]:
+                count += 1
+                dfs(i, j)
+
+    return count
+
+
+grid = [
+    "000110001010",
+    "111011110001",
+    "111010010010",
+    "100000000100"
+]
+
+print(count_components(grid))

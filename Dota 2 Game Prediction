@@ -1,0 +1,41 @@
+from collections import defaultdict
+import sys
+
+# Learn hero strengths from training data
+strength = defaultdict(int)
+
+with open("trainingdata.txt", "r", encoding="utf-8") as f:
+    for line in f:
+        parts = [x.strip() for x in line.strip().split(",")]
+
+        team1 = parts[:5]
+        team2 = parts[5:10]
+        winner = int(parts[10])
+
+        if winner == 1:
+            for hero in team1:
+                strength[hero] += 1
+            for hero in team2:
+                strength[hero] -= 1
+        else:
+            for hero in team2:
+                strength[hero] += 1
+            for hero in team1:
+                strength[hero] -= 1
+
+# Predict games
+k = int(sys.stdin.readline())
+
+for _ in range(k):
+    parts = [x.strip() for x in sys.stdin.readline().strip().split(",")]
+
+    team1 = parts[:5]
+    team2 = parts[5:10]
+
+    score1 = sum(strength[h] for h in team1)
+    score2 = sum(strength[h] for h in team2)
+
+    if score1 >= score2:
+        print(1)
+    else:
+        print(2)

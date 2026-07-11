@@ -1,0 +1,23 @@
+class Solution:
+    def connect(self, root):
+        if not root:
+            return root
+
+        leftmost = root
+
+        while leftmost.left:
+            curr = leftmost
+
+            while curr:
+                # Connect left child -> right child
+                curr.left.next = curr.right
+
+                # Connect right child -> next subtree's left child
+                if curr.next:
+                    curr.right.next = curr.next.left
+
+                curr = curr.next
+
+            leftmost = leftmost.left
+
+        return root

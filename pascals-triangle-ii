@@ -1,0 +1,10 @@
+class Solution:
+    def getRow(self, rowIndex):
+        row = [1] * (rowIndex + 1)
+        val = 1
+
+        for i in range(1, rowIndex):
+            val = val * (rowIndex - i + 1) // i
+            row[i] = val
+
+        return row

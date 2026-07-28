@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int minCut(string s) {
+        int n = s.size();
+
+        vector<vector<bool>> pal(n, vector<bool>(n, false));
+        vector<int> dp(n, 0);
+
+        // Build palindrome table
+        for (int end = 0; end < n; end++) {
+            for (int start = end; start >= 0; start--) {
+                if (s[start] == s[end] &&
+                    (end - start <= 2 || pal[start + 1][end - 1])) {
+                    pal[start][end] = true;
+                }
+            }
+        }
+
+        // Compute minimum cuts
+        for (int i = 0; i < n; i++) {
+
+            if (pal[0][i]) {
+                dp[i] = 0;
+                continue;
+            }
+
+            dp[i] = i; // Worst case: cut every character
+
+            for (int j = 1; j <= i; j++) {
+                if (pal[j][i]) {
+                    dp[i] = min(dp[i], dp[j - 1] + 1);
+                }
+            }
+        }
+
+        return dp[n - 1];
+    }
+};

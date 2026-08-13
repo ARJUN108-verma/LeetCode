@@ -1,0 +1,21 @@
+class Solution:
+    def insertionSortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode(0)
+        curr = head
+
+        while curr:
+            # Save the next node before rearranging curr
+            nxt = curr.next
+
+            # Find insertion position
+            prev = dummy
+            while prev.next and prev.next.val < curr.val:
+                prev = prev.next
+
+            # Insert curr
+            curr.next = prev.next
+            prev.next = curr
+
+            curr = nxt
+
+        return dummy.next      

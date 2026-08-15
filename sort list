@@ -1,0 +1,72 @@
+class Solution:
+    def sortList(self, head):
+        if not head or not head.next:
+            return head
+
+        # Count nodes
+        n = 0
+        p = head
+        while p:
+            n += 1
+            p = p.next
+
+        dummy = ListNode(0)
+        dummy.next = head
+
+        size = 1
+
+        while size < n:
+            prev = dummy
+            curr = dummy.next
+
+            while curr:
+                left = curr
+
+                # Cut left part
+                ltail = left
+                for _ in range(size - 1):
+                    if not ltail.next:
+                        break
+                    ltail = ltail.next
+
+                right = ltail.next
+                ltail.next = None
+
+                if not right:
+                    prev.next = left
+                    break
+
+                # Cut right part
+                rtail = right
+                for _ in range(size - 1):
+                    if not rtail.next:
+                        break
+                    rtail = rtail.next
+
+                next_curr = rtail.next
+                rtail.next = None
+
+                # Merge
+                while left and right:
+                    if left.val <= right.val:
+                        prev.next = left
+                        left = left.next
+                    else:
+                        prev.next = right
+                        right = right.next
+                    prev = prev.next
+
+                if left:
+                    prev.next = left
+                    while prev.next:
+                        prev = prev.next
+                else:
+                    prev.next = right
+                    while prev.next:
+                        prev = prev.next
+
+                curr = next_curr
+
+            size <<= 1
+
+        return dummy.next

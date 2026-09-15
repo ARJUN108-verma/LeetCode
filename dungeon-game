@@ -1,0 +1,32 @@
+class Solution:
+    def calculateMinimumHP(self, dungeon):
+        m = len(dungeon)
+        n = len(dungeon[0])
+
+        # dp[i][j] = minimum health needed when entering (i, j)
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+        # Sentinel values
+        INF = float('inf')
+
+        for i in range(m + 1):
+            dp[i][n] = INF
+
+        for j in range(n + 1):
+            dp[m][j] = INF
+
+        # The cell just after the princess
+        dp[m][n - 1] = 1
+        dp[m - 1][n] = 1
+
+        # Fill from bottom-right to top-left
+        for i in range(m - 1, -1, -1):
+            for j in range(n - 1, -1, -1):
+
+                # Minimum health required after leaving this cell
+                next_health = min(dp[i + 1][j], dp[i][j + 1])
+
+                # Health required before entering this cell
+                dp[i][j] = max(1, next_health - dungeon[i][j])
+
+        return dp[0][0]

@@ -1,0 +1,48 @@
+class WordDictionary:
+
+    def __init__(self):
+        self.children = [{}]
+        self.ends = [False]
+
+    def addWord(self, word: str) -> None:
+        node = 0
+        children = self.children
+        ends = self.ends
+
+        for ch in word:
+            nxt = children[node].get(ch)
+            if nxt is None:
+                nxt = len(children)
+                children[node][ch] = nxt
+                children.append({})
+                ends.append(False)
+            node = nxt
+
+        ends[node] = True
+
+    def search(self, word: str) -> bool:
+        children = self.children
+        ends = self.ends
+        stack = [(0, 0)]
+        n = len(word)
+
+        while stack:
+            node, i = stack.pop()
+
+            if i == n:
+                if ends[node]:
+                    return True
+                continue
+
+            ch = word[i]
+            curr = children[node]
+
+            if ch != '.':
+                nxt = curr.get(ch)
+                if nxt is not None:
+                    stack.append((nxt, i + 1))
+            else:
+                for nxt in curr.values():
+                    stack.append((nxt, i + 1))
+
+        return False

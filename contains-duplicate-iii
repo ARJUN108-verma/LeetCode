@@ -1,0 +1,36 @@
+
+class Solution:
+    def containsNearbyAlmostDuplicate(self, nums, indexDiff, valueDiff):
+        if valueDiff == 0:
+            seen = set()
+            for i, x in enumerate(nums):
+                if x in seen:
+                    return True
+                seen.add(x)
+                if i >= indexDiff:
+                    seen.remove(nums[i - indexDiff])
+            return False
+
+        w = valueDiff + 1
+        buckets = {}
+
+        for i, x in enumerate(nums):
+            b = x // w
+
+            if b in buckets:
+                return True
+
+            v = buckets.get(b - 1)
+            if v is not None and x - v <= valueDiff:
+                return True
+
+            v = buckets.get(b + 1)
+            if v is not None and v - x <= valueDiff:
+                return True
+
+            buckets[b] = x
+
+            if i >= indexDiff:
+                del buckets[nums[i - indexDiff] // w]
+
+        return False

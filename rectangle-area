@@ -1,0 +1,10 @@
+class Solution:
+    def computeArea(self, ax1, ay1, ax2, ay2, bx1, by1, bx2, by2):
+        w = (ax2 if ax2 < bx2 else bx2) - (ax1 if ax1 > bx1 else bx1)
+        h = (ay2 if ay2 < by2 else by2) - (ay1 if ay1 > by1 else by1)
+
+        if w < 0: w = 0
+        if h < 0: h = 0
+
+        return ((ax2-ax1)*(ay2-ay1) +
+                (bx2-bx1)*(by2-by1) - w*h)

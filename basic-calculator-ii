@@ -1,0 +1,29 @@
+
+class Solution:
+    def calculate(self, s: str) -> int:
+        res = last = num = 0
+        op = '+'
+
+        for c in s + '+':
+            if c == ' ':
+                continue
+
+            if '0' <= c <= '9':
+                num = num * 10 + ord(c) - 48
+                continue
+
+            if op == '+':
+                res += last
+                last = num
+            elif op == '-':
+                res += last
+                last = -num
+            elif op == '*':
+                last *= num
+            else:
+                last = abs(last) // num * (1 if last >= 0 else -1)
+
+            op = c
+            num = 0
+
+        return res + last
